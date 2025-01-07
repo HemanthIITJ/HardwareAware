@@ -8,13 +8,17 @@ def get_hardware_info():
     info = {}
     info['system'] = platform.system()
     info['architecture'] = platform.machine()
-    info['cpu'] = {'name': platform.processor(), 'cores': multiprocessing.cpu_count(),
-                    'architecture': platform.architecture()[0]}
+    info['cpu'] = {
+        'name': platform.processor(), 
+        'cores': multiprocessing.cpu_count(),
+        'architecture': platform.architecture()[0]
+        }
     
     total_ram = psutil.virtual_memory().total
-    info['memory'] = {'ram_total_gb': round(total_ram / (1024 ** 3), 2),
-                      'ram_usage_gb': round(psutil.virtual_memory().used / (1024 ** 3), 2),
-                      'rom_total_gb': None}
+    info['memory'] = {
+       'ram_total_gb': round(total_ram / (1024 ** 3), 2),
+        'ram_usage_gb': round(psutil.virtual_memory().used / (1024 ** 3), 2),
+        'rom_total_gb': None}
    
     try:
       if info['system']=='Linux':
@@ -29,10 +33,16 @@ def get_hardware_info():
                         'capabilities': [torch.cuda.get_device_capability(i) for i in range(torch.cuda.device_count())]}
     if torch.backends.mps.is_available():
         info['mps'] = {'available': torch.backends.mps.is_available(), 'built': torch.backends.mps.is_built() }
-    info['backends'] = {'cpu': {'capability': torch.backends.cpu.get_cpu_capability()},
-                        'cudnn': {'is_available': torch.backends.cudnn.is_available(), 'version':torch.backends.cudnn.version() if torch.backends.cudnn.is_available() else None,
-                                  'enabled':torch.backends.cudnn.enabled , 'deterministic': torch.backends.cudnn.deterministic ,
-                                  'benchmark': torch.backends.cudnn.benchmark , 'benchmark_limit':torch.backends.cudnn.benchmark_limit
+    info['backends'] = {'cpu': {
+       'capability': torch.backends.cpu.get_cpu_capability()
+       },
+        'cudnn': {
+           'is_available': torch.backends.cudnn.is_available(), 
+            'version':torch.backends.cudnn.version() if torch.backends.cudnn.is_available() else None,
+            'enabled':torch.backends.cudnn.enabled , 
+            'deterministic': torch.backends.cudnn.deterministic ,
+            'benchmark': torch.backends.cudnn.benchmark , 
+            'benchmark_limit':torch.backends.cudnn.benchmark_limit
                                  },
                         'cusparselt': {'is_available': torch.backends.cusparselt.is_available() , 'version': torch.backends.cusparselt.version() if torch.backends.cusparselt.is_available()else None },
                         'mha' : { 'fastpath_enabled':torch.backends.mha.get_fastpath_enabled() },
